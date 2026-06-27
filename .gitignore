@@ -1,0 +1,31 @@
+.DS_Store
+
+# Python/R caches
+__pycache__/
+*.pyc
+.pytest_cache/
+tests/
+test_*.py
+.Rhistory
+.RData
+
+# Local environments and dependency caches
+.conda/
+.venv/
+renv/library/
+
+# Generated analysis outputs and large objects
+analysis/
+*.rds
+*.rda
+*.h5ad
+*.loom
+*.mtx
+*.mtx.gz
+*.qs
+
+# Logs and temporary files
+*.log
+tmp/
+temp/
+docs/superpowers/

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Single-cell Research Pilot"
+  short_description: "Run reproducible scRNA-seq research workflows"
+  default_prompt: "Use $singlecell-research-pilot to inspect my scRNA-seq dataset, choose an analysis workflow, run it reproducibly, and draft a results report."
