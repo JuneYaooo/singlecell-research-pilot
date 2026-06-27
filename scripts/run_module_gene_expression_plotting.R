@@ -44,7 +44,7 @@ write_tsv <- function(x, path) {
 args <- parse_args(commandArgs(trailingOnly = TRUE))
 out_dir <- args[["out"]]
 if (is.null(out_dir)) {
-  stop("Usage: run_logic_gene_expression_plotting.R --out <logic_out> [--object <rds>] [--genes CD3D,MS4A1]")
+  stop("Usage: run_module_gene_expression_plotting.R --out <workflow_out> [--object <rds>] [--genes CD3D,MS4A1]")
 }
 
 input_rds <- value_or_default(args, "object", file.path(out_dir, "objects", "rds", "annotated_consensus.rds"))

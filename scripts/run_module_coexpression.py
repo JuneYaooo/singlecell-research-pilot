@@ -61,14 +61,14 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
             "Run a bounded local hdWGCNA-style co-expression replacement from "
-            "Phase 1 exported counts and consensus annotations."
+            "core workflow exported counts and consensus annotations."
         )
     )
     parser.add_argument(
         "--out",
         required=True,
         type=Path,
-        help="Phase 1 output directory, for example analysis/seurat_v5_logic_run.",
+        help="core workflow output directory, for example analysis/workflow_run.",
     )
     parser.add_argument("--counts", type=Path, help="MatrixMarket counts path. Defaults under --out.")
     parser.add_argument("--genes", type=Path, help="genes.tsv path. Defaults under --out.")

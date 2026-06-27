@@ -42,7 +42,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "--out",
         required=True,
         type=Path,
-        help="Phase 1 output directory, for example analysis/seurat_v5_logic_run.",
+        help="core workflow output directory, for example analysis/workflow_run.",
     )
     parser.add_argument(
         "--target-celltype",

@@ -70,7 +70,7 @@ def parse_args() -> argparse.Namespace:
         "--out",
         required=True,
         type=Path,
-        help="Phase output directory, for example analysis/seurat_v5_logic_run.",
+        help="Workflow output directory, for example analysis/workflow_run.",
     )
     parser.add_argument(
         "--model",
@@ -101,7 +101,7 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def phase_input_paths(out_dir: Path) -> InputPaths:
+def workflow_input_paths(out_dir: Path) -> InputPaths:
     export_dir = out_dir / "objects" / "export"
     tables_dir = out_dir / "tables"
     consensus_umap = tables_dir / "annotated_consensus_umap.tsv"
@@ -489,7 +489,7 @@ def main() -> None:
 
     append_status(out_dir, MODULE_NAME, "START", "bounded local CellTypist model resolution")
     try:
-        paths = phase_input_paths(out_dir)
+        paths = workflow_input_paths(out_dir)
         summary = inspect_inputs(paths)
 
         resolution = resolve_model(args.model, model_dir)

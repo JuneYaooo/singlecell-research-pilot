@@ -1,8 +1,8 @@
 # Single-cell Full Workflow User-facing Reference
 
-Use this reference when the user asks for a complete, reusable, no-code-style or platform-style single-cell transcriptomics workflow. This file converts the user-provided Zero Coding platform article into a workflow contract: what each module is for, what inputs it needs, what outputs it should produce, how it maps to the Seurat V5 course material, and how to validate it.
+Use this reference when the user asks for a complete, reusable, no-code-style or platform-style single-cell transcriptomics workflow. This file converts the user-provided Zero Coding platform article into a workflow contract: what each module is for, what inputs it needs, what outputs it should produce, how it maps to the Seurat course material, and how to validate it.
 
-This is a product/workflow reference, not method evidence. Use `references/seurat-v5-code-index.md` and `references/seurat-v5-workflows.md` for course-source traceability. Use `analysis/seurat_v5_logic_run/tables/source_traceability_matrix.tsv` and the acceptance report for verified implementation evidence.
+This is a product/workflow reference, not method evidence. Use `references/course-code-index.md` and `references/course-adaptation.md` for course-source traceability. Use `analysis/workflow_run/tables/source_traceability_matrix.tsv`, final status tables, manifests, and reports for implementation evidence.
 
 ## Design Boundary
 
@@ -11,10 +11,10 @@ The full skill has three complementary layers:
 | layer | source | role |
 |---|---|---|
 | User workflow contract | This reference, based on the user-provided platform article | Defines modules, expected outputs, interpretation notes, and validation criteria. |
-| Method traceability | Seurat V5 course scripts and code index | Anchors each module to original commands where available. |
-| Executable evidence | Local R/Python scripts, reports, acceptance checks | Proves what currently runs in this environment and labels replacements honestly. |
+| Method traceability | Seurat course scripts and code index | Anchors each module to original commands where available. |
+| Executable evidence | Local R/Python scripts, status tables, manifests, and reports | Proves what currently runs in this environment and labels replacements honestly. |
 
-Do not treat a user-facing module list as proof that a method ran. A module is complete only when its inputs, command path, logs, outputs, and validation checks are present.
+Do not treat a user-facing module list as proof that a method ran. A module is complete only when its inputs, command path, logs, outputs, and artifact checks are present.
 
 ## Recommended Module Order
 
@@ -37,7 +37,7 @@ The first four modules are the analysis spine. Downstream modules must use the o
 
 ## Verified Workspace Artifacts
 
-The current executable workspace exports the final annotated Seurat object into reusable audit tables before downstream Python modules run:
+The bundled reference implementation exports the final annotated Seurat object into reusable audit tables before downstream Python modules run:
 
 - `tables/annotated_consensus_metadata.tsv`
 - `tables/annotated_consensus_umap.tsv`
@@ -54,7 +54,7 @@ Final audit files must exist before claiming a full run is complete:
 - `tables/final_module_status.tsv`
 - `tables/final_artifact_manifest.tsv`
 - `tables/final_artifact_manifest_summary.tsv`
-- `acceptance/acceptance_report.md`
+- `final_report.md`
 
 ## Module Contract
 
@@ -70,7 +70,7 @@ Prerequisites:
 
 Course mapping:
 
-- Scripts 3 through 9 in `references/seurat-v5-code-index.md`.
+- Scripts 3 through 9 in `references/course-code-index.md`.
 - Key logic: `Read10X()`, `Read10X_h5()`, `CreateSeuratObject()`, merge, metadata harmonization, `PercentageFeatureSet()`.
 
 Required outputs:
@@ -214,7 +214,7 @@ Prerequisites:
 Course mapping:
 
 - CellChat script 20.
-- The currently verified local run uses curated ligand-receptor scoring and is a proxy, not CellChat equivalence.
+- The bundled reference implementation uses curated ligand-receptor scoring and is a proxy, not CellChat equivalence.
 
 Required outputs:
 
@@ -285,7 +285,7 @@ Prerequisites:
 
 Course mapping:
 
-- The provided Seurat V5 course index does not currently include a dedicated CytoTRACE script.
+- The provided Seurat course index does not currently include a dedicated CytoTRACE script.
 - Treat this as a user-facing workflow requirement from the platform article and implement separately if needed.
 
 Required outputs:
@@ -301,11 +301,11 @@ Validation:
 - Scores cover the expected cell set.
 - Module status clearly says whether original CytoTRACE, CytoTRACE2, or another potential-scoring replacement was used.
 
-Implementation status in this workspace:
+Bundled implementation status:
 
-- Executable as `scripts/run_logic_cytotrace.py`.
+- Executable as `scripts/run_module_cytotrace.py`.
 - The current implementation writes `tables/cytotrace_scores.tsv`, `tables/cytotrace_celltype_summary.tsv`, `tables/cytotrace_method_status.tsv`, and `figures/cytotrace_umap.png`.
-- The current verified run detects `cytotrace2_py`, but official CytoTRACE2 execution is disabled by default because that API can require dense file materialization and model downloads. The delivered default score remains a CytoTRACE-like gene-detection potential score, not official CytoTRACE equivalence.
+- The bundled implementation can detect `cytotrace2_py`, but official CytoTRACE2 execution is disabled by default because that API can require dense file materialization and model downloads. The delivered default score remains a CytoTRACE-like gene-detection potential score, not official CytoTRACE equivalence.
 - If official CytoTRACE2 is explicitly attempted later, `tables/cytotrace_method_status.tsv` must show `method`, `status`, `official_package_available`, and `official_execution` rather than relying on narrative notes.
 
 Interpretation notes:
@@ -340,9 +340,9 @@ Validation:
 - Extracted barcodes match the rule.
 - Parent object and subset object paths are recorded.
 
-Implementation status in this workspace:
+Bundled implementation status:
 
-- Executable as `scripts/run_logic_subset.R`.
+- Executable as `scripts/run_module_subset.R`.
 - The current default extracts `logic_consensus_celltype == T_cells` from the annotated Seurat object and writes `objects/rds/subset_T_cells.rds`, barcode membership, parameters, and summary tables.
 - The module is parameterized with `--subset-column`, `--subset-values`, and `--name` for other datasets.
 
@@ -363,7 +363,7 @@ Prerequisites:
 Course mapping:
 
 - Seurat marker logic from script 17.
-- Pairwise `FindMarkers()` is part of Seurat logic and is exposed as a standalone executable module in this workspace.
+- Pairwise `FindMarkers()` is part of Seurat logic and is exposed as a standalone executable module in the bundled implementation.
 
 Required outputs:
 
@@ -377,9 +377,9 @@ Validation:
 - The comparison is not confounded with one sample unless clearly exploratory.
 - Adjusted p-values and effect sizes are present when method supports them.
 
-Implementation status in this workspace:
+Bundled implementation status:
 
-- Executable as `scripts/run_logic_findmarkers.R`.
+- Executable as `scripts/run_module_findmarkers.R`.
 - The current default compares `T_cells` versus `B_cells` by `logic_consensus_celltype` and writes `tables/findmarkers_pairwise.tsv`, parameters, and a volcano plot.
 - The module is parameterized with `--group-by`, `--ident-1`, `--ident-2`, and optional subset arguments.
 
@@ -399,7 +399,7 @@ Prerequisites:
 Course mapping:
 
 - Script 17: `FindAllMarkers()`, `presto::wilcoxauc()`, `COSG::cosg()`, `starTracer::searchMarker()`.
-- Current verified run includes Seurat `FindAllMarkers()` on the singlet object.
+- The bundled reference workflow includes Seurat `FindAllMarkers()` on the singlet object.
 
 Required outputs:
 
@@ -444,9 +444,9 @@ Validation:
 - Plots use the intended assay/layer.
 - Figure captions state whether values are raw, normalized, scaled, or imputed.
 
-Implementation status in this workspace:
+Bundled implementation status:
 
-- Executable as `scripts/run_logic_gene_expression_plotting.R`.
+- Executable as `scripts/run_module_gene_expression_plotting.R`.
 - The current default plots `CD3D,MS4A1,EPCAM,LYZ,COL1A1,VWF` from the annotated Seurat object and writes requested-gene status, expression summaries, FeaturePlot, VlnPlot, and DotPlot outputs.
 - The module is parameterized with `--genes`, `--group-by`, `--assay`, and `--slot`.
 
@@ -466,7 +466,7 @@ Prerequisites:
 Course mapping:
 
 - The course scripts write many fixed-name files; adapted runs must parameterize output directories and avoid collisions.
-- Current workspace has reports, module status tables, source traceability, acceptance manifests, and a SHA256 file manifest module.
+- The bundled implementation has reports, module status tables, source traceability, final manifests, and a SHA256 file manifest module.
 
 Required outputs:
 
@@ -483,7 +483,7 @@ Validation:
 
 - Expected files exist and are nonempty.
 - Module status has no hidden failures.
-- Acceptance checks can be rerun.
+- Artifact checks can be rerun from the recorded commands and manifests.
 - Skipped modules record why they were skipped.
 - `final_artifact_manifest.tsv` includes final reports and manifest files, so the downloadable artifact set is auditable by checksum.
 
@@ -495,7 +495,7 @@ Interpretation notes:
 
 Use this matrix before saying a workflow is complete.
 
-| module | minimum completion signal | current workspace status |
+| module | minimum completion signal | bundled implementation status |
 |---|---|---|
 | Data Import | Object created, metadata added, QC metrics present | Verified through course core and logic export. |
 | Quality Control | Pre/post QC outputs and filtered object | Verified for course example; doublet replacement has caveat. |
@@ -508,7 +508,7 @@ Use this matrix before saying a workflow is complete.
 | FindMarkers | Pairwise DE module | Executable Seurat `FindMarkers()` module. |
 | FindAllMarkers | All-group marker table | Verified with Seurat FindAllMarkers. |
 | Gene Expression Plotting | Arbitrary-gene plotting module | Executable Seurat FeaturePlot, VlnPlot, and DotPlot module. |
-| File Management | Manifest, final manifest, reports, logs, acceptance | Executable SHA256 manifest, `final_artifact_manifest.tsv`, `final_module_status.tsv`, reports, logs, and acceptance checks. |
+| File Management | Manifest, final manifest, reports, logs, final status | Executable SHA256 manifest, `final_artifact_manifest.tsv`, `final_module_status.tsv`, reports, logs, and artifact checks. |
 
 ## Replacement Policy
 
@@ -526,7 +526,7 @@ Use these labels consistently:
 
 Hard rule: proxy modules cannot satisfy original-package equivalence. For example, curated ligand-receptor scoring is not CellChat, and expression-deviation CNV scoring is not copykat or inferCNV.
 
-## Acceptance Standard
+## Completion Standard
 
 A completed full-workflow skill should provide:
 
@@ -535,6 +535,6 @@ A completed full-workflow skill should provide:
 - A report that separates descriptive results, statistical claims, and hypotheses.
 - Re-runnable commands or orchestration scripts.
 - Method-status tables for optional or replacement modules, including `cytotrace_method_status.tsv`, `enrichment_method_status.tsv`, and `celltypist_model_status.tsv`.
-- A final acceptance report that checks required objects, exported embeddings, figures, tables, row counts, manifests, and skipped-module reasons.
+- A final report and manifests that cover required objects, exported embeddings, figures, tables, row counts, checksums, and skipped-module reasons.
 
-When the user asks for "100% verifiable", answer in terms of this acceptance standard: 100% verifiable means every delivered artifact has a reproducible source, a status, and a check. It does not mean every biological hypothesis is true or every replacement is equivalent to the original R package.
+When the user asks for "100% verifiable", answer in terms of this completion standard: 100% verifiable means every delivered artifact has a reproducible source, a status, and a check. It does not mean every biological hypothesis is true or every replacement is equivalent to the original R package.

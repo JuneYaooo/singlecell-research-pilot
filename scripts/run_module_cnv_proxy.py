@@ -73,7 +73,7 @@ def parse_args() -> argparse.Namespace:
             "copykat, inferCNV, or a chromosome-ordered CNV caller."
         )
     )
-    parser.add_argument("--out", required=True, type=Path, help="Phase 1 output directory.")
+    parser.add_argument("--out", required=True, type=Path, help="core workflow output directory.")
     parser.add_argument("--counts", type=Path, help="MatrixMarket counts path. Defaults under --out.")
     parser.add_argument("--genes", type=Path, help="Gene name TSV path. Defaults under --out.")
     parser.add_argument("--annotations", type=Path, help="Consensus annotation TSV path. Defaults under --out.")

@@ -67,7 +67,7 @@ def main() -> None:
     out_dir = Path(args.out)
     tables = out_dir / "tables"
 
-    append_status(out_dir, "phase1_report", "START", "building report")
+    append_status(out_dir, "core_report", "START", "building report")
 
     status_events = read_tsv(tables / "module_status.tsv")
     status_latest = latest_status(status_events)
@@ -113,25 +113,25 @@ def main() -> None:
     )
 
     commands = [
-        ".conda/seurat-core/bin/Rscript scripts/run_logic_export_seurat.R --input analysis/seurat_v5_course_run/objects/processed_multi10x_qc_harmony_cluster.rds --out analysis/seurat_v5_logic_run",
+        ".conda/seurat-core/bin/Rscript scripts/run_module_export_seurat.R --input analysis/course_run/objects/processed_multi10x_qc_harmony_cluster.rds --out analysis/workflow_run",
         "conda create -y -p .conda/scverse-course python=3.11 pip",
         ".conda/scverse-course/bin/pip install scanpy scrublet celltypist gprofiler-official matplotlib seaborn pandas scipy scikit-learn",
-        ".conda/scverse-course/bin/python scripts/run_logic_scrublet.py --export-dir analysis/seurat_v5_logic_run/objects/export --out analysis/seurat_v5_logic_run",
-        ".conda/seurat-core/bin/Rscript scripts/run_logic_reprocess_singlets.R --input analysis/seurat_v5_course_run/objects/processed_multi10x_qc_harmony_cluster.rds --doublets analysis/seurat_v5_logic_run/tables/scrublet_doublet_scores.tsv --out analysis/seurat_v5_logic_run",
-        ".conda/scverse-course/bin/python scripts/run_logic_enrichment.py --markers analysis/seurat_v5_logic_run/tables/cluster_markers_seurat.tsv --out analysis/seurat_v5_logic_run --online-timeout-seconds 30",
-        ".conda/scverse-course/bin/python scripts/run_logic_report.py --out analysis/seurat_v5_logic_run",
+        ".conda/scverse-course/bin/python scripts/run_module_scrublet.py --export-dir analysis/workflow_run/objects/export --out analysis/workflow_run",
+        ".conda/seurat-core/bin/Rscript scripts/run_module_reprocess_singlets.R --input analysis/course_run/objects/processed_multi10x_qc_harmony_cluster.rds --doublets analysis/workflow_run/tables/scrublet_doublet_scores.tsv --out analysis/workflow_run",
+        ".conda/scverse-course/bin/python scripts/run_module_enrichment.py --markers analysis/workflow_run/tables/cluster_markers_seurat.tsv --out analysis/workflow_run --online-timeout-seconds 30",
+        ".conda/scverse-course/bin/python scripts/run_module_core_report.py --out analysis/workflow_run",
     ]
 
-    report = f"""# Seurat V5 Course Logic Reproduction Phase 1 Report
+    report = f"""# Single-cell Core Workflow Report
 
 ## Scope
 
-This run reproduces the course logic rather than the original scripts line by line. The verified Seurat V5 core run is reused, and downstream modules are implemented with installable replacement tools or documented fallbacks.
+This report summarizes the core workflow outputs used by downstream single-cell modules. It preserves the course analysis logic where a course archive is supplied, while using installable tools or documented fallbacks when exact package execution is not available.
 
 ## Input
 
-- Verified Seurat object: `analysis/seurat_v5_course_run/objects/processed_multi10x_qc_harmony_cluster.rds`
-- Output root: `analysis/seurat_v5_logic_run`
+- Verified Seurat object: `analysis/course_run/objects/processed_multi10x_qc_harmony_cluster.rds`
+- Output root: `analysis/workflow_run`
 - Protected R environment: `.conda/seurat-core`
 - Replacement Python environment: `.conda/scverse-course`
 
@@ -183,22 +183,22 @@ The enrichment module first attempts online gProfiler with a bounded request tim
 
 {markdown_table(file_rows)}
 
-## Deferred Modules
+## Downstream Modules Not Covered Here
 
 - CellTypist automatic annotation: package is installed, but bounded model retrieval was not available; the package tried to download all 61 remote models. Marker-rule annotation is used as the primary local annotation.
-- LIANA cell-cell communication: deferred to Phase 2 after annotation review.
-- infercnvpy/CNV scoring: deferred to Phase 2 and should run only if epithelial/tumor-like and reference populations are credible.
-- PAGA/DPT trajectory: deferred to Phase 2 and should run only if the annotated cells support a plausible continuum.
-- hdWGCNA/co-expression: deferred to Phase 2.
+- LIANA cell-cell communication: run as a downstream module after annotation review.
+- infercnvpy/CNV scoring: run downstream only if epithelial/tumor-like and reference populations are credible.
+- PAGA/DPT trajectory: run downstream only if the annotated cells support a plausible continuum.
+- hdWGCNA/co-expression: run downstream when cell numbers and metacell design are adequate.
 - Kimi/DeepSeek LLM annotation: skipped unless API credentials and upload approval are provided.
 
 ## Interpretation Limits
 
-The Phase 1 outputs are technical reproductions of the course analysis logic. Marker-rule annotations are transparent but still require biological review. Fallback doublet calls and fallback enrichment are practical replacements for blocked dependencies, not numerical replicas of DoubletFinder/scDblFinder or clusterProfiler.
+The core outputs are technical reproductions of the analysis logic. Marker-rule annotations are transparent but still require biological review. Fallback doublet calls and fallback enrichment are practical replacements for blocked dependencies, not numerical replicas of DoubletFinder/scDblFinder or clusterProfiler.
 """
 
     (out_dir / "report.md").write_text(report)
-    append_status(out_dir, "phase1_report", "PASS", "report.md and module_status_latest.tsv written")
+    append_status(out_dir, "core_report", "PASS", "report.md and module_status_latest.tsv written")
     print("Wrote", out_dir / "report.md")
 
 

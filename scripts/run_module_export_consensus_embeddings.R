@@ -42,7 +42,7 @@ write_tsv <- function(x, path) {
 args <- parse_args(commandArgs(trailingOnly = TRUE))
 out_dir <- args[["out"]]
 if (is.null(out_dir)) {
-  stop("Usage: run_logic_export_consensus_embeddings.R --out <logic_out> [--object <rds>]")
+  stop("Usage: run_module_export_consensus_embeddings.R --out <workflow_out> [--object <rds>]")
 }
 
 input_rds <- value_or_default(args, "object", file.path(out_dir, "objects", "rds", "annotated_consensus.rds"))

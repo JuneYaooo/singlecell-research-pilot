@@ -1,16 +1,16 @@
-# Seurat V5 Course-Derived Workflow Reference
+# Seurat Course-Derived Workflow Reference
 
-Use this reference when a user asks to combine this skill with the provided Seurat V5 course code, asks for a Chinese Seurat V5 full workflow, or mentions modules that match the course archive such as DoubletFinder, scDblFinder, CellChat, copykat, inferCNV, hdWGCNA, CIBERSORT, or MuSiC.
+Use this reference when a user asks to combine this skill with the provided Seurat course code, asks for a Chinese Seurat full workflow, or mentions modules that match the course archive such as DoubletFinder, scDblFinder, CellChat, copykat, inferCNV, hdWGCNA, CIBERSORT, or MuSiC.
 
-For platform-style module coverage, expected user-facing outputs, interpretation notes, and acceptance criteria, read `references/singlecell-full-workflow-user-facing.md`. That reference complements this file but does not replace source-code traceability.
+For platform-style module coverage, expected user-facing outputs, interpretation notes, and acceptance criteria, read `references/full-workflow-contract.md`. That reference complements this file but does not replace source-code traceability.
 
 The course archive is a useful implementation map, not a ready-to-run pipeline. The scripts are interactive, use `setwd(choose.dir())`, assume local example files, emit fixed output names, and often load broad package sets. Adapt their logic into project-specific scripts with explicit input paths, output directories, parameters, seeds, and session info.
 
-For exact source-script mapping, read `references/seurat-v5-code-index.md`.
+For exact source-script mapping, read `references/course-code-index.md`.
 
 ## Source Pattern
 
-The archive covers a Seurat V5-centered R workflow:
+The archive covers a Seurat-centered R workflow:
 
 1. Build Seurat objects from count matrices, 10X folders, multiple 10X samples, and H5 files.
 2. Add mitochondrial and ribosomal QC metrics.
@@ -148,9 +148,9 @@ The enrichment script uses `clusterProfiler`, `DOSE`, and `org.Hs.eg.db` for GO 
 - State organism database and gene universe.
 - Treat enrichment as functional interpretation of a gene list, not direct pathway activity proof.
 
-Current workspace adaptation:
+Bundled implementation notes:
 
-- `scripts/run_logic_enrichment.py` first tries online gProfiler through `gprofiler-official` with a bounded request timeout controlled by `--online-timeout-seconds`.
+- `scripts/run_module_enrichment.py` first tries online gProfiler through `gprofiler-official` with a bounded request timeout controlled by `--online-timeout-seconds`.
 - If gProfiler is unavailable or times out, it writes a local marker-overlap fallback and records the method in `tables/enrichment_method_status.tsv`.
 - The fallback preserves the interpretation step over marker gene lists, but it is not equivalent to `clusterProfiler` GO/KEGG statistics.
 
@@ -242,7 +242,7 @@ Before executing adapted course logic:
 - Capture commands and logs for reproducibility.
 - Keep private human genomic or clinical data local unless the user explicitly approves an external service.
 
-Minimum final deliverables for a Seurat V5 run:
+Minimum final deliverables for a Seurat run:
 
 - Reproducible R scripts or notebooks.
 - Config/parameter file.

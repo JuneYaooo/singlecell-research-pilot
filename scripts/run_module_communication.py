@@ -79,14 +79,14 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
             "Compute local curated ligand-receptor communication scores from "
-            "Phase 1 exported counts and consensus annotations."
+            "core workflow exported counts and consensus annotations."
         )
     )
     parser.add_argument(
         "--out",
         required=True,
         type=Path,
-        help="Phase 1 output directory, for example analysis/seurat_v5_logic_run.",
+        help="core workflow output directory, for example analysis/workflow_run.",
     )
     parser.add_argument(
         "--min-cells",

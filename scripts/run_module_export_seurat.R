@@ -34,7 +34,7 @@ input_rds <- args[["input"]]
 out_dir <- args[["out"]]
 
 if (is.null(input_rds) || is.null(out_dir)) {
-  stop("Usage: run_logic_export_seurat.R --input <processed.rds> --out <output_root>")
+  stop("Usage: run_module_export_seurat.R --input <processed.rds> --out <output_root>")
 }
 if (!file.exists(input_rds)) {
   stop("Input RDS does not exist: ", input_rds)

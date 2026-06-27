@@ -21,17 +21,17 @@ arg_value <- function(flag, default = NULL) {
 
 course_dir_arg <- arg_value("--course-dir", "")
 if (identical(course_dir_arg, "")) {
-  course_root_arg <- Sys.getenv("SEURAT_V5_COURSE_ROOT", unset = "")
+  course_root_arg <- Sys.getenv("SINGLECELL_COURSE_ROOT", unset = "")
   if (identical(course_root_arg, "")) {
-    stop("--course-dir or SEURAT_V5_COURSE_ROOT is required. Point it at the CIBERSORT course folder or extracted Seurat V5 course directory.")
+    stop("--course-dir or SINGLECELL_COURSE_ROOT is required. Point it at the CIBERSORT course folder or extracted Seurat course directory.")
   }
   course_dir_arg <- file.path(course_root_arg, "24-1反卷积(CIBERSORT)")
 }
 course_dir <- normalizePath(course_dir_arg, mustWork = TRUE)
 seurat_rds <- normalizePath(arg_value("--seurat-rds", file.path(
-  getwd(), "analysis", "seurat_v5_course_run", "objects", "processed_multi10x_qc_harmony_cluster.rds"
+  getwd(), "analysis", "course_run", "objects", "processed_multi10x_qc_harmony_cluster.rds"
 )), mustWork = TRUE)
-out_dir <- normalizePath(arg_value("--out", file.path(getwd(), "analysis", "seurat_v5_course_run", "cibersort")), mustWork = FALSE)
+out_dir <- normalizePath(arg_value("--out", file.path(getwd(), "analysis", "course_run", "cibersort")), mustWork = FALSE)
 max_samples <- as.integer(arg_value("--max-samples", "30"))
 
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
@@ -80,7 +80,7 @@ signature <- run_step("build_cluster_signature_from_seurat", {
 
 mixture <- run_step("prepare_tcga_mixture_subset", {
   tcga <- fread(file.path(course_dir, "TCGAexp.txt"), data.table = FALSE, check.names = FALSE)
-  rownames(tcga) <- tcga$V1
+  rownames(tcga) <- tcga[[1]]
   tcga <- tcga[, -1, drop = FALSE]
   tumor_cols <- grep("-01A", colnames(tcga), value = TRUE, fixed = TRUE)
   if (length(tumor_cols) == 0) stop("No TCGA tumor sample columns ending in -01A found")

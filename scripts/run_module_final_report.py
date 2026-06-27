@@ -189,11 +189,11 @@ def write_report(out_dir: Path) -> None:
         ]
     )
 
-    report = f"""# Seurat V5 Course Logic Final Report
+    report = f"""# Single-cell Workflow Final Report
 
 ## Scope
 
-This report consolidates the verified Phase 1 workflow and the Phase 2 replacement modules. The objective is to reproduce the course logic with tools that can run in this environment, not to claim numerical identity with the original package outputs.
+This report consolidates the core workflow and downstream modules. When a course archive is used, the objective is to preserve and audit the source analysis logic with tools that can run in this environment, not to claim numerical identity with unavailable original package outputs.
 
 ## Output Root
 
@@ -215,7 +215,7 @@ This report consolidates the verified Phase 1 workflow and the Phase 2 replaceme
 
 {markdown_table(annotation_counts)}
 
-## Phase 2 Table Summaries
+## Downstream Table Summaries
 
 {optional_summaries}
 
@@ -227,7 +227,7 @@ This report consolidates the verified Phase 1 workflow and the Phase 2 replaceme
 
 - Doublet detection used the documented per-sample QC top-5-percent fallback because Scrublet could not determine an automatic threshold on the processed course object.
 - Enrichment tries online gProfiler with a bounded request timeout; this run used local marker-overlap fallback because the online request timed out or was unavailable.
-- `celltypist_annotation` is a legacy Phase 1 attempt; the authoritative bounded CellTypist module is `celltypist_bounded`, which only uses local `.pkl` models and skips otherwise.
+- `celltypist_annotation` is a legacy core-module attempt; the authoritative bounded CellTypist module is `celltypist_bounded`, which only uses local `.pkl` models and skips otherwise.
 - Source traceability is now audited in `source_traceability_report.md`; modules labeled `PROXY_ONLY` are not accepted as original-package-equivalent results.
 - CNV output is an exploratory expression-deviation proxy, not inferCNV or copykat.
 - Communication output is a local ligand-receptor scoring replacement, not CellChat.

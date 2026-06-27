@@ -102,7 +102,7 @@ doublet_path <- args[["doublets"]]
 out_dir <- args[["out"]]
 
 if (is.null(input_rds) || is.null(doublet_path) || is.null(out_dir)) {
-  stop("Usage: run_logic_reprocess_singlets.R --input <processed.rds> --doublets <doublet.tsv> --out <output_root>")
+  stop("Usage: run_module_reprocess_singlets.R --input <processed.rds> --doublets <doublet.tsv> --out <output_root>")
 }
 if (!file.exists(input_rds)) stop("Input RDS does not exist: ", input_rds)
 if (!file.exists(doublet_path)) stop("Doublet TSV does not exist: ", doublet_path)

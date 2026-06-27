@@ -19,12 +19,12 @@ arg_value <- function(flag, default = NULL) {
   args[[hit + 1]]
 }
 
-course_root_arg <- arg_value("--course-root", Sys.getenv("SEURAT_V5_COURSE_ROOT", unset = ""))
+course_root_arg <- arg_value("--course-root", Sys.getenv("SINGLECELL_COURSE_ROOT", unset = ""))
 if (identical(course_root_arg, "")) {
-  stop("--course-root or SEURAT_V5_COURSE_ROOT is required. Point it at the extracted Seurat V5 course directory.")
+  stop("--course-root or SINGLECELL_COURSE_ROOT is required. Point it at the extracted Seurat course directory.")
 }
 course_root <- normalizePath(course_root_arg, mustWork = TRUE)
-out_root <- normalizePath(arg_value("--out", file.path(getwd(), "analysis", "seurat_v5_course_run")), mustWork = FALSE)
+out_root <- normalizePath(arg_value("--out", file.path(getwd(), "analysis", "course_run")), mustWork = FALSE)
 max_cells_per_sample <- as.integer(arg_value("--max-cells-per-sample", "2500"))
 set.seed(20260626)
 
@@ -316,7 +316,7 @@ run_step("write_final_summary", {
   save_table(summary_df, "object_summaries.tsv")
   writeLines(capture.output(sessionInfo()), file.path(out_root, "logs", "sessionInfo.txt"))
   report <- c(
-    "# Seurat V5 Course Core Run Report",
+    "# Seurat Course Core Run Report",
     "",
     paste("- Course root:", course_root),
     paste("- Output root:", out_root),
@@ -342,4 +342,4 @@ run_step("write_final_summary", {
   writeLines(report, file.path(out_root, "report.md"))
 })
 
-message("Completed Seurat V5 course core run: ", out_root)
+message("Completed Seurat course core run: ", out_root)
