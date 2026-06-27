@@ -31,10 +31,11 @@ course_dir <- normalizePath(course_dir_arg, mustWork = TRUE)
 seurat_rds <- normalizePath(arg_value("--seurat-rds", file.path(
   getwd(), "analysis", "course_run", "objects", "processed_multi10x_qc_harmony_cluster.rds"
 )), mustWork = TRUE)
-out_dir <- normalizePath(arg_value("--out", file.path(getwd(), "analysis", "course_run", "cibersort")), mustWork = FALSE)
+out_dir_arg <- arg_value("--out", file.path(getwd(), "analysis", "course_run", "cibersort"))
 max_samples <- as.integer(arg_value("--max-samples", "30"))
 
-dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
+dir.create(out_dir_arg, recursive = TRUE, showWarnings = FALSE)
+out_dir <- normalizePath(out_dir_arg, mustWork = TRUE)
 status_path <- file.path(out_dir, "cibersort_status.tsv")
 writeLines("step\tstatus\tdetail", status_path)
 status <- function(step, state, detail = "") {

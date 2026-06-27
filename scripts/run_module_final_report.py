@@ -85,6 +85,7 @@ def summarize_optional_table(path: Path, label: str) -> str:
 
 def write_report(out_dir: Path) -> None:
     tables = out_dir / "tables"
+    post_report_manifest_status = "POST_REPORT_ARTIFACT (generated after final_report by final_artifact_manifest step)"
 
     status_events = read_tsv(tables / "module_status.tsv")
     latest = set_latest_status(
@@ -168,6 +169,10 @@ def write_report(out_dir: Path) -> None:
         ("tables/final_artifact_manifest_summary.tsv", ""),
     ]
     file_rows = pd.DataFrame([file_status(out_dir, rel, expected_skip) for rel, expected_skip in key_files])
+    file_rows.loc[
+        file_rows["path"].isin(["tables/final_artifact_manifest.tsv", "tables/final_artifact_manifest_summary.tsv"]),
+        "status",
+    ] = post_report_manifest_status
 
     optional_summaries = "\n".join(
         [
@@ -185,7 +190,7 @@ def write_report(out_dir: Path) -> None:
             summarize_optional_table(tables / "coexpression_module_scores.tsv", "Co-expression module scores"),
             summarize_optional_table(tables / "celltypist_bounded_annotation.tsv", "CellTypist bounded annotation"),
             summarize_optional_table(tables / "file_manifest.tsv", "File manifest"),
-            summarize_optional_table(tables / "final_artifact_manifest.tsv", "Final artifact manifest"),
+            "- Final artifact manifest: generated after final_report by the final_artifact_manifest step.",
         ]
     )
 
